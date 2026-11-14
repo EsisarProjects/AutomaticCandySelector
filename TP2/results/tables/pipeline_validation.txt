@@ -1,0 +1,7 @@
+ACS - Rapport de validation
+===================================
+train: 68 images, 17 batches
+val: 70 images, 18 batches
+test: 70 images, 18 batches
+
+Contrôles automatiques : OK
