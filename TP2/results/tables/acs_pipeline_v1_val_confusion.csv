@@ -1,0 +1,14 @@
+variante_reelle,crocodile/bleu,crocodile/jaune,crocodile/orange,crocodile/rouge,crocodile/vert,ourson/blanc,ourson/jaune,ourson/orange,ourson/rougefaible,ourson/rougefort,ourson/vert,fraise/rouge,oeuf/blanc
+crocodile/bleu,5,0,0,0,0,0,0,0,0,0,0,0,0
+crocodile/jaune,0,4,1,0,0,0,0,0,0,0,0,0,0
+crocodile/orange,0,0,2,2,0,0,0,1,0,0,0,0,0
+crocodile/rouge,0,0,0,5,0,0,0,0,0,0,0,0,0
+crocodile/vert,0,0,0,0,5,0,0,0,0,0,0,0,0
+ourson/blanc,0,0,0,0,0,5,0,0,0,0,0,0,0
+ourson/jaune,0,0,0,0,0,0,5,0,0,0,0,0,0
+ourson/orange,0,0,0,0,0,0,0,5,0,0,0,0,0
+ourson/rougefaible,0,0,0,0,0,0,0,0,4,1,0,0,0
+ourson/rougefort,0,0,0,0,0,0,0,0,0,5,0,0,0
+ourson/vert,0,0,0,0,0,0,0,0,0,0,5,0,0
+fraise/rouge,0,0,0,0,0,0,0,0,0,0,0,10,0
+oeuf/blanc,0,0,0,0,0,0,0,0,0,0,0,0,5
