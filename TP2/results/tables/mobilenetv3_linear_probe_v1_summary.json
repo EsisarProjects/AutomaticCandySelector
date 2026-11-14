@@ -1,0 +1,23 @@
+{
+  "run_name": "mobilenetv3_linear_probe_v1",
+  "model": "mobilenet_v3_small",
+  "mode": "linear_probe",
+  "preprocessing_method": "center_crop",
+  "device": "cuda",
+  "seed": 42,
+  "batch_size": 4,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "best_epoch": 20,
+  "epochs_executed": 20,
+  "best_val_loss": 0.06140140177282904,
+  "best_val_accuracy": 0.9857142857142858,
+  "best_val_macro_f1": 0.990799605846405,
+  "classes": [
+    "crocodile",
+    "ourson",
+    "fraise",
+    "oeuf"
+  ],
+  "test_set_used": false
+}
