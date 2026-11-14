@@ -1,0 +1,16 @@
+# ==========================================
+# ACS - Classification Configuration
+# ==========================================
+
+split:
+  train:
+    - S01
+
+  val:
+    - S02
+
+  test:
+    - S03
+
+training:
+  seed: 42

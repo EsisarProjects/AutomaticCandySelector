@@ -31,17 +31,7 @@ conda-meta/
 # ------------------------------------------
 # Datasets - Images
 # ------------------------------------------
-datasets/**/*.jpg
-datasets/**/*.jpeg
-datasets/**/*.png
-datasets/**/*.bmp
-datasets/**/*.webp
-datasets/**/*.tiff
-
-# Videos
-datasets/**/*.mp4
-datasets/**/*.avi
-datasets/**/*.mov
+datasets/
 
 # ------------------------------------------
 # Trained Models

@@ -3,65 +3,52 @@
 # ========================================
 
 types:
-  - dragibus
   - crocodile
-  - fraise
   - ourson
-  - schtroumpf
+  - fraise
   - oeuf
 
 # Étiquettes des couleurs et variantes
 couleurs:
-  - rouge
   - bleu
-  - vert
-  - noir
-  - rose
   - jaune
+  - orange
+  - rouge
+  - vert
   - blanc
-  - fraise
+  - rougefaible
+  - rougefort
 
 # Combinaisons autorisées
 variantes:
 
-  dragibus:
-    - rouge
-    - bleu
-    - vert
-    - noir
-    - rose
-    - jaune
-
   crocodile:
-    - rouge
-    - jaune
-    - vert
     - bleu
+    - jaune
     - orange
+    - rouge
+    - vert
+
+  ourson:
+    - blanc
+    - jaune
+    - orange
+    - rougefaible
+    - rougefort
+    - vert
 
   fraise:
     - rouge
 
-  ourson:
-    - blanc
-    - rouge
-    - vert
-    - jaune
-    - orange
-
-  schtroumpf:
-    - blanc
-    - jaune
-    - rouge
-  
   oeuf:
     - blanc
 
 # Règles spécifiques d'annotation
 regles_annotation:
 
-  schtroumpf:
-    critere: couleur_du_bonnet
+  ourson:
+    critere: nuance_de_rouge
     description: >
-      La couleur de la variante correspond
-      à la partie variable du bonbon.
+      Les variantes rougefaible et rougefort
+      représentent deux nuances distinctes
+      identifiées lors de la collecte.
