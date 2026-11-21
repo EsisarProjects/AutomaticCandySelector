@@ -24,11 +24,6 @@ conda-meta/
 .python-version
 
 # ------------------------------------------
-# Jupyter Notebook
-# ------------------------------------------
-.ipynb_checkpoints/
-
-# ------------------------------------------
 # Datasets - Images
 # ------------------------------------------
 datasets/
@@ -57,9 +52,9 @@ tensorboard/
 events.out.tfevents.*
 
 # ------------------------------------------
-# Generated Predictions
+# Results
 # ------------------------------------------
-results/predictions/
+results/
 
 # ------------------------------------------
 # Cache
@@ -96,3 +91,5 @@ Thumbs.db
 *.tmp
 *.temp
 *.log
+
+

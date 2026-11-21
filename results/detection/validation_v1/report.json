@@ -1,0 +1,32 @@
+{
+  "root": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/roboflow/v1_baseline",
+  "total_images": 52,
+  "total_boxes": 476,
+  "splits": {
+    "train": {
+      "images": 36,
+      "images_with_boxes": 36,
+      "images_without_boxes": 0,
+      "boxes": 326
+    },
+    "val": {
+      "images": 8,
+      "images_with_boxes": 8,
+      "images_without_boxes": 0,
+      "boxes": 74
+    },
+    "test": {
+      "images": 8,
+      "images_with_boxes": 8,
+      "images_without_boxes": 0,
+      "boxes": 76
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "preview_paths": [
+    "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/validation_v1/preview_train.jpg",
+    "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/validation_v1/preview_val.jpg",
+    "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/validation_v1/preview_test.jpg"
+  ]
+}

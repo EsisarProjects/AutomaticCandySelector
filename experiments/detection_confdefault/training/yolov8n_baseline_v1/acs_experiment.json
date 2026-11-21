@@ -1,0 +1,59 @@
+{
+  "dataset": {
+    "yaml": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/roboflow/v1_baseline/data.local.yaml",
+    "root": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/roboflow/v1_baseline",
+    "classes": [
+      "bonbon"
+    ],
+    "folders": {
+      "train": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/roboflow/v1_baseline/train/images",
+      "val": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/roboflow/v1_baseline/valid/images",
+      "test": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/roboflow/v1_baseline/test/images"
+    },
+    "images": {
+      "train": 36,
+      "val": 8,
+      "test": 8
+    }
+  },
+  "model_initial": "yolov8n.pt",
+  "pretrained": true,
+  "experiment": "baseline",
+  "epochs_requested": 30,
+  "training_parameters": {
+    "data": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/roboflow/v1_baseline/data.local.yaml",
+    "epochs": 30,
+    "batch": 2,
+    "imgsz": 640,
+    "device": "cpu",
+    "workers": 0,
+    "seed": 42,
+    "deterministic": true,
+    "patience": 8,
+    "optimizer": "AdamW",
+    "lr0": 0.001,
+    "weight_decay": 0.0005,
+    "project": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/training",
+    "name": "yolov8n_baseline_v1",
+    "exist_ok": false,
+    "plots": true,
+    "val": true,
+    "save": true,
+    "hsv_h": 0.0,
+    "hsv_s": 0.0,
+    "hsv_v": 0.0,
+    "degrees": 0.0,
+    "translate": 0.0,
+    "scale": 0.0,
+    "shear": 0.0,
+    "perspective": 0.0,
+    "flipud": 0.0,
+    "fliplr": 0.0,
+    "mosaic": 0.0,
+    "mixup": 0.0,
+    "copy_paste": 0.0
+  },
+  "custom_albumentations": [],
+  "best_weights": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/training/yolov8n_baseline_v1/weights/best.pt",
+  "last_weights": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/training/yolov8n_baseline_v1/weights/last.pt"
+}
