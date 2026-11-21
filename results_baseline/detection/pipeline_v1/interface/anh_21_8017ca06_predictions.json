@@ -1,0 +1,153 @@
+{
+  "image_source": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/raw/original/anh_21.jpg",
+  "image_annotee": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/interface/anh_21_8017ca06_annote.jpg",
+  "nombre_detections": 7,
+  "seuil_detection": 0.45,
+  "avertissement_general": "Le classifieur ne connaît que les types présents lors de son entraînement ; les objets inconnus peuvent être mal classés, même avec une confiance élevée.",
+  "detections": [
+    {
+      "id": 1,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9989140033721924,
+      "bbox_xyxy": [
+        108,
+        427,
+        203,
+        528
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.7089042663574219,
+      "couleur_predite": "jaune",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/jaune",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 2,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.8906657695770264,
+      "bbox_xyxy": [
+        409,
+        524,
+        504,
+        615
+      ],
+      "type_predit": "oeuf",
+      "confiance_type": 0.7115676403045654,
+      "couleur_predite": "blanc",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "oeuf/blanc",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 3,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.8832436800003052,
+      "bbox_xyxy": [
+        499,
+        531,
+        652,
+        622
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.9665663242340088,
+      "couleur_predite": "jaune",
+      "score_couleur": 0.6623904339607837,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/jaune",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 4,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.8061040639877319,
+      "bbox_xyxy": [
+        449,
+        656,
+        516,
+        803
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.9412906169891357,
+      "couleur_predite": "jaune",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/jaune",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 5,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9834685325622559,
+      "bbox_xyxy": [
+        518,
+        744,
+        602,
+        832
+      ],
+      "type_predit": "fraise",
+      "confiance_type": 0.3822324573993683,
+      "couleur_predite": "rouge",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "fraise/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    },
+    {
+      "id": 6,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9412356019020081,
+      "bbox_xyxy": [
+        149,
+        790,
+        234,
+        879
+      ],
+      "type_predit": "fraise",
+      "confiance_type": 0.4824184775352478,
+      "couleur_predite": "rouge",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "fraise/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    },
+    {
+      "id": 7,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9721766710281372,
+      "bbox_xyxy": [
+        221,
+        981,
+        307,
+        1071
+      ],
+      "type_predit": "fraise",
+      "confiance_type": 0.8840509057044983,
+      "couleur_predite": "rouge",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "fraise/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    }
+  ]
+}

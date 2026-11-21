@@ -1,0 +1,261 @@
+{
+  "image_source": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/raw/original/anh_14.jpg",
+  "image_annotee": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/interface/anh_14_1f3b7921_annote.jpg",
+  "nombre_detections": 12,
+  "seuil_detection": 0.45,
+  "avertissement_general": "Le classifieur ne connaît que les types présents lors de son entraînement ; les objets inconnus peuvent être mal classés, même avec une confiance élevée.",
+  "detections": [
+    {
+      "id": 1,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9276667237281799,
+      "bbox_xyxy": [
+        0,
+        65,
+        90,
+        168
+      ],
+      "type_predit": "fraise",
+      "confiance_type": 0.7508671879768372,
+      "couleur_predite": "rouge",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "fraise/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 2,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.8621376752853394,
+      "bbox_xyxy": [
+        9,
+        199,
+        139,
+        260
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.7785844206809998,
+      "couleur_predite": "rouge",
+      "score_couleur": 0.6757850299195124,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 3,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.8494581580162048,
+      "bbox_xyxy": [
+        3,
+        230,
+        50,
+        350
+      ],
+      "type_predit": "ourson",
+      "confiance_type": 0.41541165113449097,
+      "couleur_predite": "rougefaible",
+      "score_couleur": 0.6954846818966435,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "ourson/rougefaible",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    },
+    {
+      "id": 4,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9823524355888367,
+      "bbox_xyxy": [
+        32,
+        251,
+        136,
+        348
+      ],
+      "type_predit": "fraise",
+      "confiance_type": 0.583712100982666,
+      "couleur_predite": "rouge",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "fraise/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    },
+    {
+      "id": 5,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9760319590568542,
+      "bbox_xyxy": [
+        404,
+        259,
+        543,
+        399
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.9029115438461304,
+      "couleur_predite": "rouge",
+      "score_couleur": 0.6686484014428915,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 6,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9285949468612671,
+      "bbox_xyxy": [
+        296,
+        268,
+        455,
+        378
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.5506289601325989,
+      "couleur_predite": "bleu",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/bleu",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    },
+    {
+      "id": 7,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9731524586677551,
+      "bbox_xyxy": [
+        53,
+        361,
+        186,
+        459
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.6167830228805542,
+      "couleur_predite": "jaune",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/jaune",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 8,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9927814602851868,
+      "bbox_xyxy": [
+        376,
+        370,
+        535,
+        487
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.3557621240615845,
+      "couleur_predite": "rouge",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    },
+    {
+      "id": 9,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9775040149688721,
+      "bbox_xyxy": [
+        219,
+        390,
+        344,
+        475
+      ],
+      "type_predit": "ourson",
+      "confiance_type": 0.6821697950363159,
+      "couleur_predite": "rougefort",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "ourson/rougefort",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 10,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.5168580412864685,
+      "bbox_xyxy": [
+        327,
+        404,
+        364,
+        440
+      ],
+      "type_predit": "fraise",
+      "confiance_type": 0.33477264642715454,
+      "couleur_predite": "rouge",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "fraise/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    },
+    {
+      "id": 11,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.8259994983673096,
+      "bbox_xyxy": [
+        0,
+        439,
+        43,
+        524
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.7003039717674255,
+      "couleur_predite": "jaune",
+      "score_couleur": 0.6748648220510685,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/jaune",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 12,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.8111185431480408,
+      "bbox_xyxy": [
+        240,
+        605,
+        347,
+        702
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.35538843274116516,
+      "couleur_predite": "rouge",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    }
+  ]
+}

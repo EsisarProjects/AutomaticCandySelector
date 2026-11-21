@@ -1,0 +1,73 @@
+{
+  "image_source": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/raw/original/anh_1.jpg",
+  "image_annotee": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/interface/anh_1_376cc2f9_annote.jpg",
+  "nombre_detections": 3,
+  "seuil_detection": 0.45,
+  "avertissement_general": "Le classifieur ne connaît que les types présents lors de son entraînement ; les objets inconnus peuvent être mal classés, même avec une confiance élevée.",
+  "detections": [
+    {
+      "id": 1,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.7949497103691101,
+      "bbox_xyxy": [
+        281,
+        407,
+        427,
+        485
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.6282244920730591,
+      "couleur_predite": "bleu",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/bleu",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible"
+    },
+    {
+      "id": 2,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9588142037391663,
+      "bbox_xyxy": [
+        587,
+        648,
+        680,
+        734
+      ],
+      "type_predit": "ourson",
+      "confiance_type": 0.543627917766571,
+      "couleur_predite": "orange",
+      "score_couleur": 0.6802064753514925,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "ourson/orange",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    },
+    {
+      "id": 3,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.783907413482666,
+      "bbox_xyxy": [
+        468,
+        800,
+        551,
+        888
+      ],
+      "type_predit": "oeuf",
+      "confiance_type": 0.39289364218711853,
+      "couleur_predite": "blanc",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "oeuf/blanc",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier"
+    }
+  ]
+}

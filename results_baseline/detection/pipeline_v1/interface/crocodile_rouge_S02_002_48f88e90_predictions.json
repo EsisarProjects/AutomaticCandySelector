@@ -1,0 +1,8 @@
+{
+  "image_source": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/classification/raw/crocodile/rouge/S02/crocodile_rouge_S02_002.jpg",
+  "image_annotee": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/interface/crocodile_rouge_S02_002_48f88e90_annote.jpg",
+  "nombre_detections": 0,
+  "seuil_detection": 0.45,
+  "avertissement_general": "Le classifieur ne connaît que les types présents lors de son entraînement ; les objets inconnus peuvent être mal classés, même avec une confiance élevée.",
+  "detections": []
+}

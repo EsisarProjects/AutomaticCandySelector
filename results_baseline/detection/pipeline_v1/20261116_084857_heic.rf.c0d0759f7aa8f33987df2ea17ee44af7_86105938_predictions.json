@@ -1,0 +1,162 @@
+{
+  "image_source": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/detection/roboflow/v1_baseline/valid/images/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7.jpg",
+  "image_annotee": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7_86105938_annote.jpg",
+  "nombre_detections": 7,
+  "seuil_detection": 0.45,
+  "avertissement_general": "Le classifieur ne connaît que les types présents lors de son entraînement ; les objets inconnus peuvent être mal classés, même avec une confiance élevée.",
+  "detections": [
+    {
+      "id": 1,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9861568212509155,
+      "bbox_xyxy": [
+        312,
+        108,
+        349,
+        143
+      ],
+      "type_predit": "oeuf",
+      "confiance_type": 0.6782584190368652,
+      "couleur_predite": "blanc",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "oeuf/blanc",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible",
+      "image_crop": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/crops/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7_86105938/bonbon_001.png"
+    },
+    {
+      "id": 2,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9936239719390869,
+      "bbox_xyxy": [
+        143,
+        143,
+        262,
+        236
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.37792491912841797,
+      "couleur_predite": "vert",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/vert",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier",
+      "image_crop": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/crops/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7_86105938/bonbon_002.png"
+    },
+    {
+      "id": 3,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9797389507293701,
+      "bbox_xyxy": [
+        165,
+        231,
+        201,
+        264
+      ],
+      "type_predit": "oeuf",
+      "confiance_type": 0.46879667043685913,
+      "couleur_predite": "blanc",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "oeuf/blanc",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier",
+      "image_crop": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/crops/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7_86105938/bonbon_003.png"
+    },
+    {
+      "id": 4,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9867312908172607,
+      "bbox_xyxy": [
+        391,
+        312,
+        518,
+        394
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.8358674049377441,
+      "couleur_predite": "bleu",
+      "score_couleur": 0.6906879656539666,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/bleu",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible",
+      "image_crop": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/crops/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7_86105938/bonbon_004.png"
+    },
+    {
+      "id": 5,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9933034777641296,
+      "bbox_xyxy": [
+        321,
+        333,
+        393,
+        423
+      ],
+      "type_predit": "oeuf",
+      "confiance_type": 0.9799323678016663,
+      "couleur_predite": "blanc",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "oeuf/blanc",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible",
+      "image_crop": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/crops/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7_86105938/bonbon_005.png"
+    },
+    {
+      "id": 6,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.994771420955658,
+      "bbox_xyxy": [
+        149,
+        366,
+        239,
+        481
+      ],
+      "type_predit": "crocodile",
+      "confiance_type": 0.5999822616577148,
+      "couleur_predite": "vert",
+      "score_couleur": 1.0,
+      "source_couleur": "knn_hsv",
+      "variante_predite": "crocodile/vert",
+      "segmentation_status": "detecte",
+      "avertissements": [
+        "type_faible_confiance"
+      ],
+      "statut": "a_verifier",
+      "image_crop": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/crops/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7_86105938/bonbon_006.png"
+    },
+    {
+      "id": 7,
+      "classe_detection": "bonbon",
+      "confiance_detection": 0.9873178601264954,
+      "bbox_xyxy": [
+        360,
+        425,
+        394,
+        463
+      ],
+      "type_predit": "fraise",
+      "confiance_type": 0.6153358817100525,
+      "couleur_predite": "rouge",
+      "score_couleur": null,
+      "source_couleur": "regle_du_pilote",
+      "variante_predite": "fraise/rouge",
+      "segmentation_status": "detecte",
+      "avertissements": [],
+      "statut": "prediction_disponible",
+      "image_crop": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/crops/20261116_084857_heic.rf.c0d0759f7aa8f33987df2ea17ee44af7_86105938/bonbon_007.png"
+    }
+  ]
+}
