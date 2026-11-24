@@ -40,9 +40,9 @@ def resize_for_analysis(rgb: np.ndarray, max_side: int = 800) -> np.ndarray:
 
 def segment_colored_candy(
     rgb: np.ndarray,
-    min_saturation: int = 45,
-    min_value: int = 40,
-    min_area: int = 40,
+    min_saturation: int = 20,
+    min_value: int = 15,
+    min_area: int = 30,
 ) -> np.ndarray:
     """Masque (0/255) d'un objet *coloré* sur fond blanc/gris.
 
@@ -131,7 +131,7 @@ def compute_hsv_features(rgb: np.ndarray, mask: np.ndarray) -> dict:
 
 def read_train_metadata(path: Path = TRAIN_CSV) -> pd.DataFrame:
     if not path.is_file():
-        raise FileNotFoundError(f"CSV introuvable : {path}")
+        raise FileNotFoundError(f"FileNotFound : {path}")
     df = pd.read_csv(path, dtype=str)
     columns = {"image_path", "type", "couleur", "session_id"}
     missing = columns.difference(df.columns)
@@ -141,8 +141,12 @@ def read_train_metadata(path: Path = TRAIN_CSV) -> pd.DataFrame:
         raise ValueError("CSV d'entraînement vide")
     if df[list(columns)].isna().any().any():
         raise ValueError("Métadonnées manquantes")
-    if set(df["session_id"]) != {"S01"}:
-        raise ValueError("Cette première analyse est réservée à S01 (train)")
+    
+    # Cho phép cả S01 cũ hoặc 'train' mới do script của chúng ta tạo ra
+    valid_sessions = {"S01", "train"}
+    if not set(df["session_id"]).issubset(valid_sessions):
+        raise ValueError(f"Session_id không hợp lệ: {set(df['session_id'])}")
+        
     return df
 
 

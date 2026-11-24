@@ -59,10 +59,10 @@ def load_variants(config_path: Path = CLASSES_YAML) -> dict[str, list[str]]:
 
 
 def read_split(split: str, split_dir: Path = SPLIT_DIR) -> pd.DataFrame:
-    """Lit S01 ou S02; refuse délibérément l'utilisation de S03 ici."""
-    sessions = {"train": "S01", "val": "S02"}
+    """Lit S01 ou S02 / train ou val."""
+    sessions = {"train": ["S01", "train"], "val": ["S02", "val"]}
     if split not in sessions:
-        raise ValueError("Seuls les splits 'train' (S01) et 'val' (S02) sont autorisés")
+        raise ValueError("Seuls les splits 'train' et 'val' sont autorisés")
     csv_path = Path(split_dir) / f"classification_{split}.csv"
     if not csv_path.is_file():
         raise FileNotFoundError(f"Fichier introuvable : {csv_path}")
@@ -72,8 +72,12 @@ def read_split(split: str, split_dir: Path = SPLIT_DIR) -> pd.DataFrame:
         raise ValueError(f"Métadonnées manquantes ou vides : {csv_path}")
     if df[list(required)].isna().any().any():
         raise ValueError(f"Valeurs manquantes dans : {csv_path}")
-    if set(df["session_id"]) != {sessions[split]}:
-        raise ValueError(f"{split} doit correspondre uniquement à {sessions[split]}")
+    
+    # Cho phép cả session cũ (S01/S02) lẫn session mới ('train'/'val')
+    allowed_sessions = set(sessions[split])
+    if not set(df["session_id"]).issubset(allowed_sessions):
+        raise ValueError(f"{split} doit correspondre uniquement à l'une de ces sessions : {allowed_sessions}")
+        
     if df["image_path"].duplicated().any():
         raise ValueError(f"Chemins dupliqués dans {csv_path}")
     return df

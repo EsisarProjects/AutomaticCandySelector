@@ -177,10 +177,10 @@ def draw_detections(rgb: np.ndarray, detections: list[dict[str, Any]]) -> Image.
     orange = (241, 142, 28)
     dark = (29, 44, 61)
     soft = (95, 107, 121)
-    font_number = _legend_font(15, bold=True)
-    font_title = _legend_font(19, bold=True)
-    font_main = _legend_font(15, bold=True)
-    font_small = _legend_font(13)
+    font_number = _legend_font(24, bold=True)
+    font_title = _legend_font(26, bold=True)
+    font_main = _legend_font(20, bold=True)
+    font_small = _legend_font(22)
 
     # Les boîtes restent sur l'image ; seulement de petits identifiants,
     # de préférence au-dessus de chaque boîte, sont ajoutés à la photo.
@@ -190,16 +190,26 @@ def draw_detections(rgb: np.ndarray, detections: list[dict[str, Any]]) -> Image.
         y1, y2 = max(0, y1), min(height - 1, y2)
         attention = item.get("statut") != "prediction_disponible"
         stroke = orange if attention else green
-        draw.rectangle((x1, y1, x2, y2), outline=stroke, width=3)
+        
+        # 1. TĂNG ĐỘ DÀY KHUNG LÊN 6 (Cho cực kỳ đậm và nổi bật)
+        draw.rectangle((x1, y1, x2, y2), outline=stroke, width=10)
 
-        index = str(item["id"])
-        bounds = draw.textbbox((0, 0), index, font=font_number)
-        badge_w = max(23, (bounds[2] - bounds[0]) + 11)
-        badge_h = 22
+        # 2. CHỈ ĐÁNH SỐ THỨ TỰ (Ví dụ: 01, 02...) KHỚP VỚI BẢNG BÊN PHẢI
+        index = f"{item['id']:02d}" # Định dạng 2 chữ số: 01, 02, 03...
+        
+        # Dùng font to cho số thứ tự sắc nét
+        font_badge = _legend_font(20, bold=True)
+        bounds = draw.textbbox((0, 0), index, font=font_badge)
+        
+        badge_w = (bounds[2] - bounds[0]) + 16
+        badge_h = 30
         bx = min(x1, width - badge_w)
-        by = (y1 - badge_h - 2) if y1 >= badge_h + 2 else y1
+        by = (y1 - badge_h - 4) if y1 >= badge_h + 4 else y1
+        
+        # Vẽ hộp nền chứa số
         draw.rectangle((bx, by, bx + badge_w, by + badge_h), fill=stroke)
-        draw.text((bx + 5, by + 2), index, fill=(255, 255, 255), font=font_number)
+        # Vẽ số lên hộp
+        draw.text((bx + 8, by + 3), index, fill=(255, 255, 255), font=font_badge)
 
     # La légende occupe son propre espace, à droite de l'image.
     panel_x = width
@@ -316,8 +326,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--color-model", type=Path, default=DEFAULT_COLOR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--device", choices=("cpu", "cuda", "auto"), default="cpu")
-    parser.add_argument("--conf", type=float, default=0.45)
-    parser.add_argument("--iou", type=float, default=0.50)
+    parser.add_argument("--conf", type=float, default=0.65)
+    parser.add_argument("--iou", type=float, default=0.3)
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--padding", type=float, default=0.02)
     parser.add_argument("--type-warning", type=float, default=0.60)
