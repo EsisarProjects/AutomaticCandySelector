@@ -1,6 +1,6 @@
 """ACS — Étape 2.5 : détection + classification du type + prédiction couleur.
 
-Réutilise SANS MODIFICATION src.pipeline.ACSPipeline.predict_rgb (Étape 1.7).
+Uses src.pipeline.ACSPipeline.predict_rgb with ConvNeXt-Tiny.
 Lancement depuis la racine du projet :
     python -m src.detection.integrated_pipeline --source photo.jpg --device cpu
     python -m src.detection.integrated_pipeline --source dossier_images --save-crops
@@ -18,11 +18,16 @@ from typing import Any
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+from src.config import load_config, path_from_root
+
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DETECTOR = ROOT / "results/detection/training/yolov8n_baseline_v1/weights/best.pt"
-DEFAULT_TYPE = ROOT / "models/mobilenetv3_linear_probe_v1_best.pth"
-DEFAULT_COLOR = ROOT / "models/color_hsv_knn_v1.joblib"
-DEFAULT_OUTPUT = ROOT / "results/detection/pipeline_v1"
+_DETECTION_CONFIG = load_config('detection')
+_APP_CONFIG = load_config('application')
+DEFAULT_DETECTOR = path_from_root(_DETECTION_CONFIG['checkpoint'])
+DEFAULT_TYPE = path_from_root(load_config('classification')['checkpoint'])
+DEFAULT_COLOR = path_from_root(load_config('color')['checkpoint'])
+DEFAULT_OUTPUT = path_from_root(_APP_CONFIG['output_dir'])
+DEFAULT_INFERENCE = _DETECTION_CONFIG['inference']
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".bmp", ".webp", ".tif", ".tiff"}
 
 
@@ -81,7 +86,7 @@ def run_stages(rgb: np.ndarray, *, detector: Any, classifier: Any,
     bgr = np.ascontiguousarray(rgb[:, :, ::-1])
     predictions = detector.predict(
         source=bgr, conf=detector_conf, iou=iou, imgsz=imgsz,
-        device=device, verbose=False, max_det=300,
+        device=device, verbose=False, max_det=int(DEFAULT_INFERENCE["max_det"]),
     )
     if len(predictions) != 1:
         raise RuntimeError("Une seule image est attendue par appel au détecteur")
@@ -99,8 +104,7 @@ def run_stages(rgb: np.ndarray, *, detector: Any, classifier: Any,
     crops: list[np.ndarray] = []
     for rank, idx in enumerate(order, start=1):
         crop, bounds = crop_box(rgb, coords[idx].tolist(), padding=padding)
-        # Réutilisation du pipeline original : transformation MobileNet et
-        # segmentation HSV/KNN identiques à l'étape 1.7.
+        # Classification ConvNeXt and optional color inference.
         try:
             prediction = classifier.predict_rgb(crop)
         except Exception as exc:
@@ -118,11 +122,11 @@ def run_stages(rgb: np.ndarray, *, detector: Any, classifier: Any,
         warnings = []
         if type_conf < type_warning_threshold:
             warnings.append("type_faible_confiance")
-        if str(color).lower() in {"indetermine", "unknown", "inconnu"}:
+        if not str(color).strip() or str(color).lower() in {"indetermine", "unknown", "inconnu"}:
             warnings.append("couleur_indeterminee")
         # La couleur à variante unique est une règle de catalogue, pas
         # une mesure visuelle de la couleur de l'objet.
-        if color_source != "regle_du_pilote" and segmentation_status != "detecte":
+        if color_source not in {"catalog_rule", "regle_du_pilote"} and segmentation_status not in {"detecte", "not_required"}:
             warnings.append("segmentation_couleur_incomplete")
 
         detections.append({
@@ -319,18 +323,18 @@ def process_file(image_path: Path, *, detector: Any, classifier: Any,
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="ACS — Pipeline YOLO + MobileNetV3 + HSV/KNN")
+    parser = argparse.ArgumentParser(description="ACS — Pipeline YOLO + ConvNeXt-Tiny + optional color")
     parser.add_argument("--source", type=Path, required=True, help="Image ou dossier (non récursif)")
     parser.add_argument("--detector", type=Path, default=DEFAULT_DETECTOR)
     parser.add_argument("--type-checkpoint", type=Path, default=DEFAULT_TYPE)
     parser.add_argument("--color-model", type=Path, default=DEFAULT_COLOR)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--device", choices=("cpu", "cuda", "auto"), default="cpu")
-    parser.add_argument("--conf", type=float, default=0.65)
-    parser.add_argument("--iou", type=float, default=0.3)
-    parser.add_argument("--imgsz", type=int, default=640)
-    parser.add_argument("--padding", type=float, default=0.02)
-    parser.add_argument("--type-warning", type=float, default=0.60)
+    parser.add_argument("--device", choices=("cpu", "cuda", "auto"), default=str(_APP_CONFIG["device"]))
+    parser.add_argument("--conf", type=float, default=float(DEFAULT_INFERENCE["conf"]))
+    parser.add_argument("--iou", type=float, default=float(DEFAULT_INFERENCE["iou"]))
+    parser.add_argument("--imgsz", type=int, default=int(DEFAULT_INFERENCE["image_size"]))
+    parser.add_argument("--padding", type=float, default=float(DEFAULT_INFERENCE["padding"]))
+    parser.add_argument("--type-warning", type=float, default=float(DEFAULT_INFERENCE["type_warning_threshold"]))
     parser.add_argument("--save-crops", action="store_true")
     args = parser.parse_args(argv)
     if not (0 < args.conf <= 1 and 0 < args.iou <= 1):
@@ -345,7 +349,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
     images = gather_images(args.source.expanduser().resolve())
-    for checkpoint in (args.detector, args.type_checkpoint, args.color_model):
+    required = [args.detector, args.type_checkpoint]
+    if load_config("color").get("enabled", False):
+        required.append(args.color_model)
+    for checkpoint in required:
         if not checkpoint.expanduser().resolve().is_file():
             raise FileNotFoundError(f"Modèle introuvable : {checkpoint}")
 

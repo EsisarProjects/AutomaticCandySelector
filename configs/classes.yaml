@@ -1,54 +1,22 @@
-# ========================================
-# ACS - Configuration des classes
-# ========================================
-
+# Single source of truth for ACS types and variants.
 types:
   - crocodile
-  - ourson
+  - dragibus
   - fraise
   - oeuf
+  - ourson
+  - schtroumpf
 
-# Étiquettes des couleurs et variantes
-couleurs:
-  - bleu
-  - jaune
-  - orange
-  - rouge
-  - vert
-  - blanc
-  - rougefaible
-  - rougefort
-
-# Combinaisons autorisées
 variantes:
+  crocodile: [bleu, jaune, orange, rouge, vert]
+  dragibus: [bleu, jaune, noir, rose, rouge, vert]
+  fraise: [rouge]
+  oeuf: [blanc]
+  ourson: [blanc, jaune, orange, rougefaible, rougefort, vert]
+  schtroumpf: [blanc, jaune, rouge]
 
-  crocodile:
-    - bleu
-    - jaune
-    - orange
-    - rouge
-    - vert
-
-  ourson:
-    - blanc
-    - jaune
-    - orange
-    - rougefaible
-    - rougefort
-    - vert
-
-  fraise:
-    - rouge
-
-  oeuf:
-    - blanc
-
-# Règles spécifiques d'annotation
 regles_annotation:
-
+  schtroumpf:
+    critere: couleur_du_bonnet
   ourson:
     critere: nuance_de_rouge
-    description: >
-      Les variantes rougefaible et rougefort
-      représentent deux nuances distinctes
-      identifiées lors de la collecte.

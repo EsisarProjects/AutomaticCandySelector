@@ -1,8 +1,0 @@
-{
-  "image_source": "/home/genivaldo/Documents/ESISAR/IA/TP2/datasets/classification/raw/crocodile/bleu/S01/crocodile_bleu_S01_002.jpg",
-  "image_annotee": "/home/genivaldo/Documents/ESISAR/IA/TP2/results/detection/pipeline_v1/interface/crocodile_bleu_S01_002_0929b59c_annote.jpg",
-  "nombre_detections": 0,
-  "seuil_detection": 0.45,
-  "avertissement_general": "Le classifieur ne connaît que les types présents lors de son entraînement ; les objets inconnus peuvent être mal classés, même avec une confiance élevée.",
-  "detections": []
-}

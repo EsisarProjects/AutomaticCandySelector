@@ -1,35 +1,33 @@
-# ==========================================
-# ACS - Classification Configuration
-# ==========================================
+# ConvNeXt-Tiny is the ONLY active candy-type classifier.
+architecture: convnext_tiny
+checkpoint: models/classification/convnext_tiny_best.pth
 
-split:
-  train:
-    - S01
+dataset:
+  # Convert HEIC originals to JPEGs using: python -m src.data.prepare_classification
+  raw: datasets/v2/classification/raw
+  processed: datasets/v2/classification/processed
+  # Session-based separation; independent physical candies are strongly recommended.
+  splits:
+    train: [S01, S02]
+    val: [S03]
+    test: [S04]
 
-  val:
-    - S02
-
-  test:
-    - S03
+# Keep stretch for compatibility with the collaborator's original ConvNeXt training.
+preprocessing:
+  resize_mode: stretch
+  image_size: 224
+  pad_color: [255, 255, 255]
+  normalize_mean: [0.485, 0.456, 0.406]
+  normalize_std: [0.229, 0.224, 0.225]
 
 training:
-  seed: 42
-
-  # Chargement des données
-  batch_size: 4
-  num_workers: 0
-  preprocessing_method: center_crop
-
-  # Modèle
-  mode: linear_probe
-
-  # Optimisation
-  epochs: 20
-  learning_rate: 0.001
+  pretrained: true
+  batch_size: 32
+  epochs: 10
+  learning_rate: 0.0002
   weight_decay: 0.0001
-
-  # Early Stopping
-  patience: 5
-
-  # Matériel
+  num_workers: 0
+  patience: 4
+  seed: 42
   device: auto
+  experiment_dir: results/training/classification

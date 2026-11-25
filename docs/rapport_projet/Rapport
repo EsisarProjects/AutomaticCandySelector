@@ -1,9 +1,0 @@
-Classification des types de bonbons — MobileNetV3 Small
-
-Un premier modèle de classification a été développé à partir de l'architecture MobileNetV3 Small pré-entraînée sur ImageNet. Une approche de transfert d'apprentissage par extraction de caractéristiques a été utilisée, avec un classificateur final adapté aux quatre types de bonbons du jeu de données pilote.
-
-Le modèle a obtenu une accuracy de 98,57 % et un Macro F1-score de 99,08 % sur les ensembles de validation et de test, comprenant chacun 70 images. Dans les deux ensembles, une seule erreur a été observée, correspondant à une confusion entre les classes crocodile et ourson.
-
-Ces résultats indiquent une bonne capacité de classification dans les conditions expérimentales étudiées. Toutefois, la taille réduite du jeu de données et la possible réutilisation des mêmes exemplaires physiques entre les sessions limitent les conclusions concernant la généralisation à de nouveaux objets.
-
-

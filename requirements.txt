@@ -1,0 +1,11 @@
+# Install PyTorch + torchvision matching your platform/CUDA separately if needed.
+torch
+torchvision
+ultralytics
+Pillow
+pillow-heif
+numpy
+PyYAML
+joblib
+scikit-learn
+opencv-python

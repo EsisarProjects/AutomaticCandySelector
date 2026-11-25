@@ -1,0 +1,4 @@
+# Used by Python CLI, persistent worker and Java UI.
+device: auto
+output_dir: results/inference
+save_crops: false

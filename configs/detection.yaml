@@ -1,0 +1,29 @@
+# YOLO weights deployed to models/ after training; no dependency on baseline results.
+architecture: yolov8n
+checkpoint: models/detection/yolo_best.pt
+
+dataset:
+  yaml: datasets/v2/detection/yolo/data.yaml
+
+training:
+  pretrained: yolov8n.pt
+  epochs: 30
+  batch_size: 2
+  image_size: 640
+  learning_rate: 0.001
+  weight_decay: 0.0005
+  patience: 8
+  workers: 0
+  seed: 42
+  device: cpu
+  augment: false
+  experiment_dir: results/training/detection
+  name: yolo_training
+
+inference:
+  conf: 0.45
+  iou: 0.50
+  image_size: 640
+  padding: 0.08
+  type_warning_threshold: 0.60
+  max_det: 300

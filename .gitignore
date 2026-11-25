@@ -1,95 +1,23 @@
-# ==========================================
-# ACS PROJECT - GITIGNORE
-# ==========================================
-
-# ------------------------------------------
-# Python
-# ------------------------------------------
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.egg-info/
-build/
-dist/
-
-# ------------------------------------------
-# Conda / Virtual Environments
-# ------------------------------------------
+.pytest_cache/
 .venv/
-venv/
-env/
-.conda/
-conda-meta/
-.python-version
-
-# ------------------------------------------
-# Datasets - Images
-# ------------------------------------------
-datasets/
-
-# ------------------------------------------
-# Trained Models
-# ------------------------------------------
+.idea/
+.vscode/
+*.class
+java-app/build/
+java-app/out/
+# Real images, checkpoints and generated results are local artifacts.
+datasets/**
+!datasets/**/
+!datasets/**/.gitkeep
+models/**
+!models/**/
+!models/**/.gitkeep
+results/**
+!results/**/
+!results/**/.gitkeep
+# Root-downloaded Ultralytics pretrained weights
 *.pt
 *.pth
-*.ckpt
-*.h5
-*.hdf5
-*.onnx
-*.safetensors
-*.weights
-
-# ------------------------------------------
-# Training Logs
-# ------------------------------------------
-runs/
-logs/
-lightning_logs/
-wandb/
-mlruns/
-tensorboard/
-events.out.tfevents.*
-
-# ------------------------------------------
-# Results
-# ------------------------------------------
-results/
-
-# ------------------------------------------
-# Cache
-# ------------------------------------------
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.cache/
-
-# ------------------------------------------
-# IDE
-# ------------------------------------------
-.vscode/
-.idea/
-
-# ------------------------------------------
-# Operating System
-# ------------------------------------------
-.DS_Store
-Thumbs.db
-*~
-
-# ------------------------------------------
-# Environment Variables / Secrets
-# ------------------------------------------
-.env
-.env.*
-!.env.example
-.streamlit/secrets.toml
-
-# ------------------------------------------
-# Temporary Files
-# ------------------------------------------
-*.tmp
-*.temp
-*.log
-
-
+*.joblib

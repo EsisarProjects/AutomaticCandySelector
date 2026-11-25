@@ -114,7 +114,7 @@ def main():
         assert Path(report["image_annotee"]).is_file()
         assert len(list((tmp / "sorties").glob("*_predictions.json"))) == 1
         assert all(Path(row["image_crop"]).is_file() for row in report["detections"])
-    print("ACS — Tests pipeline YOLO + MobileNet + HSV/KNN : OK")
+    print("ACS — Tests pipeline YOLO + ConvNeXt + optional color : OK")
 
 
 if __name__ == "__main__":

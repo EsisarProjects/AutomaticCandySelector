@@ -1,4 +1,4 @@
-"""ACS — Premier entraînement du détecteur de bonbons YOLOv8n.
+"""ACS — Train YOLO and publish its best weights under models/detection/.
 
 À lancer depuis la racine du projet :
     python -m src.detection.train --check-only
@@ -6,20 +6,26 @@
     python -m src.detection.train --device cpu
 
 Le jeu TEST n'est jamais utilisé pour choisir le modèle.
-Le baseline désactive les augmentations explicites Ultralytics.
+Training parameters and paths come from configs/detection.yaml.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import shutil
 from pathlib import Path
 from typing import Any
 
 import yaml
 
+from src.config import load_config, path_from_root
+
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DATA = ROOT / "datasets/detection/roboflow/v1_baseline/data.local.yaml"
-DEFAULT_OUTPUT = ROOT / "results/detection/training"
+CONFIG = load_config('detection')
+TRAINING = CONFIG['training']
+DEFAULT_DATA = path_from_root(CONFIG['dataset']['yaml'])
+DEFAULT_OUTPUT = path_from_root(TRAINING['experiment_dir'])
+DEFAULT_CHECKPOINT = path_from_root(CONFIG['checkpoint'])
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp", ".tif", ".tiff"}
 
 
@@ -40,7 +46,7 @@ def inspect_dataset(data_file: Path) -> dict[str, Any]:
     if not data_file.is_file():
         raise FileNotFoundError(
             f"YAML absent : {data_file}\n"
-            "Exécutez : python -m src.detection.validate_dataset --make-local-yaml"
+            "Create datasets/v2/detection/yolo/data.yaml from data.yaml.example"
         )
 
     config = yaml.safe_load(data_file.read_text(encoding="utf-8")) or {}
@@ -88,7 +94,7 @@ def inspect_dataset(data_file: Path) -> dict[str, Any]:
 
 
 def augmentation_settings(enabled: bool) -> dict[str, Any]:
-    """Deux expériences contrôlées : baseline versus augmentation locale."""
+    """Training-time augmentation settings (configurable by flag)."""
     settings: dict[str, Any] = {
         "hsv_h": 0.0,
         "hsv_s": 0.0,
@@ -123,17 +129,18 @@ def augmentation_settings(enabled: bool) -> dict[str, Any]:
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="ACS — Entraînement YOLOv8n")
     parser.add_argument("--data", type=Path, default=DEFAULT_DATA, help="Chemin data.local.yaml")
-    parser.add_argument("--model", default="yolov8n.pt", help="Poids de départ Ultralytics")
-    parser.add_argument("--device", default="cpu", help="cpu ou 0 (GPU CUDA)")
-    parser.add_argument("--epochs", type=int, default=30)
-    parser.add_argument("--batch", type=int, default=2)
-    parser.add_argument("--imgsz", type=int, default=640)
-    parser.add_argument("--patience", type=int, default=8)
-    parser.add_argument("--workers", type=int, default=0)
-    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--model", default=TRAINING["pretrained"], help="Initial YOLO pretrained weights")
+    parser.add_argument("--device", default=str(TRAINING["device"]), help="cpu or GPU id (e.g. 0)")
+    parser.add_argument("--epochs", type=int, default=int(TRAINING["epochs"]))
+    parser.add_argument("--batch", type=int, default=int(TRAINING["batch_size"]))
+    parser.add_argument("--imgsz", type=int, default=int(TRAINING["image_size"]))
+    parser.add_argument("--patience", type=int, default=int(TRAINING["patience"]))
+    parser.add_argument("--workers", type=int, default=int(TRAINING["workers"]))
+    parser.add_argument("--seed", type=int, default=int(TRAINING["seed"]))
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--name", default="yolov8n_baseline_v1")
-    parser.add_argument("--augment", action="store_true", help="Expérience suivante, avec augmentation locale")
+    parser.add_argument("--name", default=str(TRAINING["name"]))
+    parser.add_argument("--augment", action="store_true", default=bool(TRAINING.get("augment", False)), help="Enable YOLO training augmentation")
+    parser.add_argument("--no-augment", dest="augment", action="store_false", help="Disable YOLO training augmentation")
     parser.add_argument("--check-only", action="store_true", help="Vérifie les chemins sans importer YOLO")
     parser.add_argument("--smoke-test", action="store_true", help="Une époque à 416 px pour tester le pipeline")
     args = parser.parse_args(argv)
@@ -153,7 +160,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"{split:5} : {count} images")
     print(f"Modèle : {args.model}")
     print(f"Device : {args.device}")
-    print(f"Augmentation locale : {'oui' if args.augment else 'non (baseline)'}")
+    print(f"Augmentation locale : {'oui' if args.augment else 'non'}")
 
     if args.check_only:
         print("Vérification des chemins : OK. Aucun entraînement lancé.")
@@ -168,9 +175,7 @@ def main(argv: list[str] | None = None) -> None:
 
     epochs = 1 if args.smoke_test else args.epochs
     imgsz = 416 if args.smoke_test else args.imgsz
-    run_name = "yolov8n_smoke" if args.smoke_test else (
-        "yolov8n_augmented_v1" if args.augment and args.name == "yolov8n_baseline_v1" else args.name
-    )
+    run_name = "yolov8n_smoke" if args.smoke_test else args.name
     output = args.output.expanduser().resolve()
     output.mkdir(parents=True, exist_ok=True)
 
@@ -185,8 +190,8 @@ def main(argv: list[str] | None = None) -> None:
         "deterministic": True,
         "patience": args.patience,
         "optimizer": "AdamW",
-        "lr0": 0.001,
-        "weight_decay": 0.0005,
+        "lr0": float(TRAINING["learning_rate"]),
+        "weight_decay": float(TRAINING["weight_decay"]),
         "project": str(output),
         "name": run_name,
         "exist_ok": False,
@@ -209,7 +214,7 @@ def main(argv: list[str] | None = None) -> None:
         "dataset": summary,
         "model_initial": args.model,
         "pretrained": True,
-        "experiment": "smoke" if args.smoke_test else ("augmented" if args.augment else "baseline"),
+        "experiment": "smoke" if args.smoke_test else "training",
         "epochs_requested": epochs,
         "training_parameters": {k: v for k, v in train_options.items() if k != "augmentations"},
         "custom_albumentations": [],
@@ -221,6 +226,12 @@ def main(argv: list[str] | None = None) -> None:
     )
     print("\n=== ACS — Fin de l'entraînement ===")
     print(f"Résultats : {save_dir}")
+    if best.exists() and not args.smoke_test:
+        DEFAULT_CHECKPOINT.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(best, DEFAULT_CHECKPOINT)
+        print(f"Deployed best detector checkpoint: {DEFAULT_CHECKPOINT}")
+    elif not args.smoke_test:
+        raise FileNotFoundError(f"YOLO did not generate expected best checkpoint: {best}")
     print(f"Meilleur modèle : {best if best.exists() else 'non trouvé'}")
     print("Le jeu test est réservé à l'évaluation finale.")
 
