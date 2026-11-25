@@ -1,4 +1,4 @@
-"""Optional V2 HSV/KNN color training. Uses same session-level splits as ConvNeXt.
+"""Train the REQUIRED V2 color classifier using the ConvNeXt session-level splits.
 
 This is an experimental baseline for COLOR ONLY, not the retired V1 classifier.
 Validate carefully: white gummies and Schtroumpf bonnet colors may be challenging.
@@ -41,7 +41,7 @@ def evaluate(rows, bundle):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description='Train optional V2 color HSV/KNN')
+    parser = argparse.ArgumentParser(description='Train REQUIRED V2 color HSV/KNN')
     parser.add_argument('--check-only', action='store_true')
     parser.add_argument('--evaluate-test', action='store_true', help='Final held-out test after training')
     parser.add_argument('--test-only', action='store_true', help='Final held-out test of existing model')
@@ -78,7 +78,7 @@ def main(argv=None):
     (output/'validation.json').write_text(json.dumps(validation, indent=2), encoding='utf-8')
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, checkpoint)
-    print(f'Color model written to {checkpoint}; enable only after reviewing validation.')
+    print(f'Color model written to {checkpoint}; validate it before final deployment.')
     if args.evaluate_test:
         if not splits['test'].samples:
             raise ValueError('Independent test images required')

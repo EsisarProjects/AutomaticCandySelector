@@ -50,25 +50,35 @@ def test_sessions_not_randomly_split_and_duplicate_guard(tmp_path):
     assert {k: len(v) for k,v in counts.items()} == {'train': 1, 'val': 1, 'test': 1}
 
 
-def test_convnext_color_unavailable_is_not_fabricated(monkeypatch):
+def test_missing_required_color_checkpoint_fails(monkeypatch, tmp_path):
     from src import pipeline
     types, _ = catalog()
+    monkeypatch.setattr(pipeline, 'read_checkpoint', lambda _: {'classes': types})
+    monkeypatch.setattr(pipeline, 'load_convnext_model', lambda *a, **k: object())
+    with pytest.raises(FileNotFoundError, match='Required color classifier checkpoint'):
+        pipeline.ACSPipeline(device='cpu', root=tmp_path)
+
+
+def test_required_color_pipeline_can_predict_single_variant(monkeypatch, tmp_path):
+    from src import pipeline
+    types, variants = catalog()
     class DummyModel:
-        def __init__(self, selected):
-            self.selected = selected
-        def __call__(self, x):
+        def __call__(self, inputs):
             logits = torch.zeros((1, len(types)))
-            logits[0, self.selected] = 10
+            logits[0, types.index('fraise')] = 10
             return logits
     monkeypatch.setattr(pipeline, 'read_checkpoint', lambda _: {'classes': types})
-    monkeypatch.setattr(pipeline, 'load_convnext_model', lambda *a, **k: DummyModel(1))
-    svc = pipeline.ACSPipeline(device='cpu')
-    result = svc.predict_rgb(np.full((20, 30, 3), 255, dtype=np.uint8))
-    assert result['type_predit'] == 'dragibus'
-    assert result['couleur_predite'] == ''
-    assert result['variante_predite'] == 'dragibus'
-    svc.type_model = DummyModel(2)
+    monkeypatch.setattr(pipeline, 'load_convnext_model', lambda *a, **k: DummyModel())
+    color_model = tmp_path/'color.joblib'
+    color_model.touch()
+    monkeypatch.setattr(pipeline.joblib, 'load', lambda _: {
+        'variants': variants, 'models': {
+            name: object() for name, allowed in variants.items() if len(allowed) > 1
+        },
+    })
+    svc = pipeline.ACSPipeline(device='cpu', root=tmp_path, color_model=color_model)
     result = svc.predict_rgb(np.full((20, 30, 3), 255, dtype=np.uint8))
     assert result['type_predit'] == 'fraise'
     assert result['couleur_predite'] == 'rouge'
-    assert result['source_couleur'] == 'catalog_rule'
+    assert result['variante_predite'] == 'fraise/rouge'
+    assert result['variante_resolvida'] is True

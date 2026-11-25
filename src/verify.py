@@ -20,12 +20,12 @@ def main(argv=None):
             missing.append(label)
     color = load_config('color')
     color_path = path_from_root(color['checkpoint'])
-    if color.get('enabled'):
-        print(f'{"OK" if color_path.is_file() else "MISSING"}: color checkpoint: {color_path}')
-        if not color_path.is_file():
-            missing.append('color checkpoint')
-    else:
-        print('INFO: optional V2 color model disabled; multi-variant colors will be unknown')
+    if color.get('enabled') is not True:
+        print('INVALID: variant recognition must be enabled in configs/color.yaml')
+        missing.append('mandatory variant classifier enabled')
+    print(f'{"OK" if color_path.is_file() else "MISSING"}: required color checkpoint: {color_path}')
+    if not color_path.is_file():
+        missing.append('color checkpoint')
     classification = path_from_root(load_config('classification')['dataset']['processed'])
     detection = path_from_root(load_config('detection')['dataset']['yaml'])
     print(f'{"OK" if any(classification.rglob("*.jpg")) else "MISSING"}: V2 processed classification images: {classification}')

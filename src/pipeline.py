@@ -1,4 +1,4 @@
-"""ACS inference: ConvNeXt-Tiny type classification + optional V2 color model.
+"""ACS inference: ConvNeXt-Tiny type classification + REQUIRED V2 color model.
 
 The old MobileNet checkpoint is NOT supported or silently substituted.
 """
@@ -45,15 +45,25 @@ class ACSPipeline:
         preprocessing = bundle.get('preprocessing', type_settings['preprocessing'])
         self.transform = build_transform(preprocessing, training=False)
         self.type_model = load_convnext_model(self.type_checkpoint, self.device, self.classes)
-        self.color_enabled = bool(color_settings.get('enabled', False))
-        self.color_bundle = None
-        if self.color_enabled:
-            if not self.color_model.is_file():
-                raise FileNotFoundError(f'Color classifier enabled, but missing: {self.color_model}')
-            # joblib should be loaded only from a trusted local source.
-            self.color_bundle = joblib.load(self.color_model)
-            if not isinstance(self.color_bundle, dict):
-                raise ValueError('Unsupported color classifier format')
+        if color_settings.get('enabled') is not True:
+            raise ValueError('Variant classification is mandatory: configs/color.yaml must set enabled: true')
+        if not self.color_model.is_file():
+            raise FileNotFoundError(f'Required color classifier checkpoint missing: {self.color_model}')
+        # Only load joblib from a trusted local training process.
+        self.color_bundle = joblib.load(self.color_model)
+        if not isinstance(self.color_bundle, dict):
+            raise ValueError('Unsupported color classifier format')
+        self._validate_color_model()
+
+    def _validate_color_model(self):
+        """Reject models incompatible with the complete six-type/22-variant catalog."""
+        observed = self.color_bundle.get('variants', {})
+        if not isinstance(observed, dict) or observed != self.catalog_variants:
+            raise ValueError('Color checkpoint does not cover the complete 22-variant catalog')
+        estimators = self.color_bundle.get('models', {})
+        required = {typ for typ, variants in self.catalog_variants.items() if len(variants) > 1}
+        if not isinstance(estimators, dict) or not required.issubset(estimators):
+            raise ValueError(f'Color checkpoint is missing trained multi-variant models: {required - set(estimators)}')
 
     def _resolve(self, path):
         path = Path(path).expanduser()
@@ -76,34 +86,29 @@ class ACSPipeline:
             color = options[0]
             source = 'catalog_rule'    # NOT a visual color prediction
             segmentation_status = 'not_required'
-        elif self.color_bundle is not None:
-            variants_in_model = self.color_bundle.get('variants', {})
-            # Do not report an old V1 model as capable of recognizing new V2 classes.
-            if candy_type in variants_in_model and set(variants_in_model[candy_type]) == set(options):
-                from src.color.color_classifier import extract_features_rgb, predict_color
-                features = extract_features_rgb(
-                    rgb,
-                    max_side=int(self.color_bundle.get('max_side', 200)),
-                    min_saturation=int(self.color_bundle.get('min_saturation', 25)),
-                )
-                result = predict_color(self.color_bundle, candy_type, features)
-                candidate = str(result.get('prediction', '')).strip()
-                if candidate in options:
-                    color = candidate
-                else:
-                    color = ''
-                candidate_score = result.get('score')
-                if candidate_score is not None and math.isfinite(float(candidate_score)):
-                    score = float(candidate_score)
-                source = str(result.get('source', 'hsv_knn'))
-                segmentation_status = str(features.get('status', 'unknown'))
+        else:
+            from src.color.color_classifier import extract_features_rgb, predict_color
+            features = extract_features_rgb(
+                rgb,
+                max_side=int(self.color_bundle.get('max_side', 800)),
+                min_saturation=int(self.color_bundle.get('min_saturation', 45)),
+            )
+            result = predict_color(self.color_bundle, candy_type, features)
+            candidate = str(result.get('prediction', '')).strip()
+            color = candidate if candidate in options else ''
+            candidate_score = result.get('score')
+            if candidate_score is not None and math.isfinite(float(candidate_score)):
+                score = float(candidate_score)
+            source = str(result.get('source', 'hsv_knn'))
+            segmentation_status = str(features.get('status', 'unknown'))
         return {
             'type_predit': candy_type,
             'confiance_type': float(probabilities[index].item()),
             'couleur_predite': color,
             'score_couleur': score,
             'source_couleur': source,
-            'variante_predite': f'{candy_type}/{color}' if color else candy_type,
+            'variante_predite': f'{candy_type}/{color}' if color else 'unknown',
+            'variante_resolvida': bool(color),
             'segmentation_status': segmentation_status,
         }
 

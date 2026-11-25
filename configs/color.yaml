@@ -1,5 +1,6 @@
-# Enable only AFTER training and validating all 22 V2 variants.
-enabled: false
+# Inference refuses to start if the fitted V2 model is missing or incomplete.
+# A single difficult image may still produce an explicit unknown/abstention.
+enabled: true
 checkpoint: models/color/color_classifier.joblib
 method: hsv_knn
 training:

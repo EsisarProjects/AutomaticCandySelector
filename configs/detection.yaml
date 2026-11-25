@@ -27,3 +27,14 @@ inference:
   padding: 0.08
   type_warning_threshold: 0.60
   max_det: 300
+
+# Independent scene-level evaluation requires per-object TRUE type + variant
+# in addition to the usual one-class bonbon YOLO boxes.
+evaluation:
+  matching_iou: 0.50
+  ground_truth:
+    val: datasets/v2/detection/annotations/val_objects.csv
+    test: datasets/v2/detection/annotations/test_objects.csv
+  images:
+    val: datasets/v2/detection/yolo/val/images
+    test: datasets/v2/detection/yolo/test/images

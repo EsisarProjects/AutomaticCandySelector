@@ -104,7 +104,7 @@ def run_stages(rgb: np.ndarray, *, detector: Any, classifier: Any,
     crops: list[np.ndarray] = []
     for rank, idx in enumerate(order, start=1):
         crop, bounds = crop_box(rgb, coords[idx].tolist(), padding=padding)
-        # Classification ConvNeXt and optional color inference.
+        # Classification ConvNeXt followed by REQUIRED color inference.
         try:
             prediction = classifier.predict_rgb(crop)
         except Exception as exc:
@@ -323,7 +323,7 @@ def process_file(image_path: Path, *, detector: Any, classifier: Any,
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="ACS — Pipeline YOLO + ConvNeXt-Tiny + optional color")
+    parser = argparse.ArgumentParser(description="ACS — Pipeline YOLO + ConvNeXt-Tiny + mandatory color")
     parser.add_argument("--source", type=Path, required=True, help="Image ou dossier (non récursif)")
     parser.add_argument("--detector", type=Path, default=DEFAULT_DETECTOR)
     parser.add_argument("--type-checkpoint", type=Path, default=DEFAULT_TYPE)
@@ -349,9 +349,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
     images = gather_images(args.source.expanduser().resolve())
-    required = [args.detector, args.type_checkpoint]
-    if load_config("color").get("enabled", False):
-        required.append(args.color_model)
+    if load_config("color").get("enabled") is not True:
+        raise ValueError('Variant classification is required: set configs/color.yaml enabled: true')
+    required = [args.detector, args.type_checkpoint, args.color_model]
     for checkpoint in required:
         if not checkpoint.expanduser().resolve().is_file():
             raise FileNotFoundError(f"Modèle introuvable : {checkpoint}")
