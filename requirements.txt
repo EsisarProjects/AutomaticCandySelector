@@ -9,3 +9,5 @@ PyYAML
 joblib
 scikit-learn
 opencv-python
+matplotlib
+

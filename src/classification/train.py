@@ -141,19 +141,23 @@ def main(argv=None):
     best_accuracy = -1.0
     unimproved = 0
     history = []
+    from src.evaluation.reporting import save_history
     for epoch in range(1, int(training['epochs']) + 1):
         model.train()
-        running = count = 0
+        running = count = train_correct = 0
         for images, targets in loaders['train']:
             images, targets = images.to(device), targets.to(device)
             optimizer.zero_grad()
-            loss = criterion(model(images), targets)
+            logits = model(images)
+            loss = criterion(logits, targets)
+            train_correct += int((logits.argmax(dim=1) == targets).sum().item())
             loss.backward()
             optimizer.step()
             running += float(loss.item()) * len(targets)
             count += len(targets)
         validation = evaluate(model, loaders['val'], criterion, device)
         item = {'epoch': epoch, 'train_loss': running/max(1,count),
+                'train_accuracy': train_correct/max(1,count),
                 'val_loss': validation['loss'], 'val_accuracy': validation['accuracy']}
         history.append(item)
         print(item, flush=True)
@@ -174,6 +178,7 @@ def main(argv=None):
         if unimproved >= int(training['patience']):
             break
     (experiment_dir / 'history.json').write_text(json.dumps(history, indent=2), encoding='utf-8')
+    save_history(history, experiment_dir)
     print(f'Best ConvNeXt saved to {destination}; val accuracy={best_accuracy:.4f}')
     if args.evaluate_test:
         bundle = read_checkpoint(destination)

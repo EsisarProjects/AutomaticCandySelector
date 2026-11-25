@@ -8,7 +8,7 @@ __pycache__/
 java-app/build/
 java-app/out/
 # Real images, checkpoints and generated results are local artifacts.
-datasets/**
+/datasets
 !datasets/**/
 !datasets/**/.gitkeep
 models/**

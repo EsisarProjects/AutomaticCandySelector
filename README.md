@@ -36,31 +36,10 @@ python tests/test_detection_pipeline.py
 python -m src.verify
 ```
 
-## Bring in existing trained models
-
-**Weights are intentionally not included in this source-only bundle.** Place the
-colleague's existing ConvNeXt checkpoint at:
-
-```text
-models/classification/convnext_tiny_best.pth
-```
-
-If you need to run the old trained YOLO while preparing a new detector, **copy only
-its best.pt weight file**, not the historical plots/logs, to:
-
-```text
-models/detection/yolo_best.pt
-```
-
-The weights must be trained with the architecture/class mapping expected by the
-pipeline. ConvNeXt checkpoint `classes` must match the 6 types in `classes.yaml`.
-If the colleague's checkpoint was trained on only 4 types, it will be rejected.
-
 ## Dataset conversion and training
 
 Place new ORIGINAL photography under
 `datasets/v2/classification/raw/<type>/<variant>/<S01|S02|S03|S04>/`.
-Do not mix old V1 photographs into V2. Keep the originals unchanged.
 
 ```bash
 python -m src.data.prepare_classification
@@ -70,15 +49,10 @@ python -m src.classification.train
 python -m src.classification.train --test-only
 ```
 
-The configuration currently assigns **S01+S02=train, S03=val, S04=test**.
-These groups must also use independent physical candy samples / acquisition
-conditions to avoid misleading scores. Validation and test are not created by
+The configuration currently assigns **S01+S02=train, S03=val, S04=test**. Validation and test are not created by
 randomly shuffling correlated photographs. If only S01 is available, independent
 validation is missing and the training check will fail intentionally.
 
-`preprocessing.resize_mode: stretch` matches the colleague's original training
-code. Both new training and inference use this same transform; do not change it
-for an old checkpoint without retraining/validating.
 
 For YOLO, prepare labeled data in the usual Ultralytics structure under
 `datasets/v2/detection/yolo/` and copy `data.yaml.example` to `data.yaml`:
@@ -93,9 +67,6 @@ When YOLO finishes training, `best.pt` is copied automatically to
 `models/detection/yolo_best.pt`. Training logs remain in `results/training/detection`.
 
 ## Optional color classifier
-
-The previous V1 HSV/KNN is not automatically considered suitable for all 22
-variants. The new V2 training path is:
 
 ```bash
 python -m src.color.train --check-only
@@ -139,5 +110,4 @@ The generated image/JSON live under `results/inference/`.
 
 The included tests verify the configuration contract, session split behavior,
 color fallback behavior, and a synthetic detector/classifier integration path.
-They **do not validate real ConvNeXt or YOLO accuracy**. Real weights, V2 images,
-and actual desktop UI interaction must be tested on the user's computer.
+They do not validate real ConvNeXt or YOLO accuracy.
