@@ -3,14 +3,14 @@ architecture: convnext_tiny
 checkpoint: models/classification/convnext_tiny_best.pth
 
 dataset:
-  # Convert HEIC originals to JPEGs using: python -m src.data.prepare_classification
+  # Imported JPEGs from external Train_Val and Test via src.data.import_classification.
   raw: datasets/v2/classification/raw
   processed: datasets/v2/classification/processed
-  # Session-based separation; independent physical candies are strongly recommended.
+  # Split labels are directory names under processed/<type>/<variant>/.
   splits:
-    train: [S01, S02]
-    val: [S03]
-    test: [S04]
+    train: [train]
+    val: [val]
+    test: [test]
 
 # Keep stretch for compatibility with the collaborator's original ConvNeXt training.
 preprocessing:
