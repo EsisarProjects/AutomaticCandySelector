@@ -12,11 +12,9 @@ variantes:
   dragibus: [bleu, jaune, noir, rose, rouge, vert]
   fraise: [rouge]
   oeuf: [blanc]
-  ourson: [blanc, jaune, orange, rougefaible, rougefort, vert]
+  ourson: [blanc, jaune, orange, rouge, vert]
   schtroumpf: [blanc, jaune, rouge]
 
 regles_annotation:
   schtroumpf:
     critere: couleur_du_bonnet
-  ourson:
-    critere: nuance_de_rouge

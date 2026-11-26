@@ -2,7 +2,7 @@
 
 **Automatic Candy Selector (ACS)** is a desktop computer-vision project that detects candies in photographs and identifies both their type and color variant. We built a Python inference pipeline combining **YOLO**, **ConvNeXt-Tiny**, and a **required variant-classification stage**, and connected it to a Java Swing application through a persistent Python worker.
 
-The recognition catalog contains 6 candy types and 22 valid type–variant combinations. Detection, type classification, and variant classification are separate components. The application explicitly marks a variant as unresolved when the image does not provide enough information. An unresolved variant is not counted as a correct prediction in evaluation.
+The recognition catalog contains 6 candy types and 21 valid type–variant combinations. Detection, type classification, and variant classification are separate components. The application explicitly marks a variant as unresolved when the image does not provide enough information. An unresolved variant is not counted as a correct prediction in evaluation.
 
 ## System architecture
 
@@ -36,16 +36,16 @@ The type and variant models are distinct: ConvNeXt has six output classes, and t
 | `dragibus` | `bleu`, `jaune`, `noir`, `rose`, `rouge`, `vert` |
 | `fraise` | `rouge` |
 | `oeuf` | `blanc` |
-| `ourson` | `blanc`, `jaune`, `orange`, `rougefaible`, `rougefort`, `vert` |
+| `ourson` | `blanc`, `jaune`, `orange`, `rouge`, `vert` |
 | `schtroumpf` | `blanc`, `jaune`, `rouge` |
 
-We organize source photographs by **type, variant, and acquisition session**. Original images are retained under `datasets/v2/classification/raw/`; converted images are written to `datasets/v2/classification/processed/`. We use session-based splits instead of assigning highly correlated photographs randomly:
+We organize source photographs by **type, variant**. Original images are retained under `datasets/v2/classification/raw/`; converted images are written to `datasets/v2/classification/processed/`. We use session-based splits instead of assigning highly correlated photographs randomly:
 
 | Split | Sessions | Use |
 | --- | --- | --- |
-| Training | `S01` and `S02` | Model fitting |
-| Validation | `S03` | Hyperparameter selection and model validation |
-| Independent test | `S04` | Final evaluation of frozen models |
+| Training | Model fitting |
+| Validation | Hyperparameter selection and model validation |
+| Independent test | Final evaluation of frozen models |
 
 Photographs of the same physical candy or near-identical capture conditions should stay within one split. Grouped cross-validation over development sessions is supported for the ConvNeXt type model and `S04` is not used during that process.
 
