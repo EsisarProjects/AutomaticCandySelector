@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import math
 from pathlib import Path
 from typing import Any
 
@@ -81,6 +82,38 @@ def inspect_dataset(data_file: Path) -> dict[str, Any]:
         label_dir = image_dir.parent / "labels"
         if not label_dir.is_dir():
             raise FileNotFoundError(f"Dossier annotations absent : {label_dir}")
+        # Validate the annotation files already provided by Roboflow.
+        # Missing files represent empty-background scenes in the YOLO format;
+        # report their count so accidental missing labels are not overlooked.
+        stems = [image.stem for image in images]
+        if len(set(stems)) != len(stems):
+            raise ValueError(f"Duplicate image stems in {split}: labels would be ambiguous")
+        annotated = 0
+        unlabeled = 0
+        for image in images:
+            annotation = label_dir / f'{image.stem}.txt'
+            if not annotation.is_file():
+                unlabeled += 1
+                continue
+            for line_no, line in enumerate(annotation.read_text(encoding='utf-8-sig').splitlines(), 1):
+                fields = line.split()
+                if len(fields) != 5:
+                    raise ValueError(f'Expected YOLO class cx cy w h in {annotation}:{line_no}')
+                try:
+                    class_index = int(fields[0])
+                    cx, cy, w, h = [float(value) for value in fields[1:]]
+                except ValueError as exc:
+                    raise ValueError(f'Invalid YOLO numbers in {annotation}:{line_no}') from exc
+                if class_index != 0 or not all(math.isfinite(v) for v in (cx,cy,w,h)) or \
+                   not (0 <= cx <= 1 and 0 <= cy <= 1 and 0 < w <= 1 and 0 < h <= 1) or \
+                   cx-w/2 < -1e-4 or cy-h/2 < -1e-4 or cx+w/2 > 1+1e-4 or cy+h/2 > 1+1e-4:
+                    raise ValueError(f'Invalid bonbon class/box coordinates in {annotation}:{line_no}')
+                annotated += 1
+        if annotated == 0:
+            raise ValueError(f'No annotated candy boxes found in {split}; review Roboflow export')
+        if unlabeled:
+            print(f'WARNING: {split} contains {unlabeled} images with no label file; '
+                  'confirm that these are intended negative scenes.')
         folders[split] = str(image_dir)
         counts[split] = len(images)
 

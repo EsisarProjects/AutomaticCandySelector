@@ -174,7 +174,7 @@ def run(split:str,device:str='auto'):
     (output/'metrics.json').write_text(json.dumps(summary,indent=2),encoding='utf8')
     (output/'per_scene.json').write_text(json.dumps(all_reports,indent=2),encoding='utf8')
     if truth_variants:
-        save_variant_report(truth_variants,predicted_variants,output/'object_22_classes',
+        save_variant_report(truth_variants,predicted_variants,output/'object_variants',
                             split=split)
     print(f'END-TO-END [{split}]: {summary}')
     return summary

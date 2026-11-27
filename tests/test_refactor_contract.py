@@ -10,10 +10,11 @@ from src.classification.transforms import build_transform
 from src.detection.integrated_pipeline import DEFAULT_DETECTOR, DEFAULT_TYPE, DEFAULT_OUTPUT
 
 
-def test_catalog_covers_22_variants():
+def test_catalog_covers_21_variants():
     types, variants = catalog()
     assert types == ['crocodile', 'dragibus', 'fraise', 'oeuf', 'ourson', 'schtroumpf']
-    assert sum(map(len, variants.values())) == 22
+    assert sum(map(len, variants.values())) == 21
+    assert variants['ourson'] == ['blanc', 'jaune', 'orange', 'rouge', 'vert']
 
 
 def test_all_models_deploy_under_models_directory():
@@ -36,18 +37,37 @@ def test_geometric_preprocessing_is_deterministic_for_inference():
     assert torch.allclose(a, b)
 
 
-def test_sessions_not_randomly_split_and_duplicate_guard(tmp_path):
+def test_fixed_splits_and_duplicate_guard(tmp_path):
     cls = load_config('classification')
+    types, variants = catalog()
     root = tmp_path / 'processed'
-    for name in ('S01', 'S03', 'S04'):
-        folder = root / 'crocodile' / 'bleu' / name
-        folder.mkdir(parents=True)
-        Image.new('RGB', (20, 20), (255, 0, 0) if name != 'S03' else (0, 255, 0)).save(folder/'img.jpg')
+    # The fixture covers all catalog variants, as the real training check must.
+    for typ in types:
+        for variant in variants[typ]:
+            for split, color in [('train', (255, 0, 0)),
+                                 ('val', (0, 255, 0)), ('test', (0, 0, 255))]:
+                folder = root / typ / variant / split
+                folder.mkdir(parents=True)
+                Image.new('RGB', (20, 20), color).save(folder / 'img.jpg')
+    # Intentionally identical bytes in two splits: must reject leakage.
+    Image.new('RGB', (20, 20), (255, 0, 0)).save(root / 'crocodile' / 'bleu' / 'val' / 'img.jpg')
     with pytest.raises(ValueError, match='Identical images across'):
         check_splits(root, cls)
-    Image.new('RGB', (20, 20), (0, 0, 255)).save(root/'crocodile/bleu/S04/img.jpg')
+    # Give every image distinct pixels to isolate the expected pass case.
+    for ti, typ in enumerate(types):
+        for vi, variant in enumerate(variants[typ]):
+            for si, split in enumerate(('train', 'val', 'test')):
+                rgb = ((ti * 37 + vi * 3 + si) % 256,
+                       (vi * 45 + ti + si * 19) % 256,
+                       (si * 71 + ti * 13 + vi) % 256)
+                Image.new('RGB', (20, 20), rgb).save(root / typ / variant / split / 'img.jpg')
     counts = check_splits(root, cls)
-    assert {k: len(v) for k,v in counts.items()} == {'train': 1, 'val': 1, 'test': 1}
+    assert {name: len(data) for name, data in counts.items()} == {
+        'train': 21, 'val': 21, 'test': 21,
+    }
+    (root / 'ourson' / 'rouge' / 'val' / 'img.jpg').unlink()
+    with pytest.raises(ValueError, match='is missing 1 catalog variants'):
+        check_splits(root, cls)
 
 
 def test_missing_required_color_checkpoint_fails(monkeypatch, tmp_path):

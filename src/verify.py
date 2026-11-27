@@ -28,8 +28,17 @@ def main(argv=None):
         missing.append('color checkpoint')
     classification = path_from_root(load_config('classification')['dataset']['processed'])
     detection = path_from_root(load_config('detection')['dataset']['yaml'])
-    print(f'{"OK" if any(classification.rglob("*.jpg")) else "MISSING"}: V2 processed classification images: {classification}')
-    print(f'{"OK" if detection.is_file() else "MISSING"}: V2 YOLO data.yaml: {detection}')
+    classification_ok = classification.is_dir() and any(
+        file.suffix.lower() in {'.jpg', '.jpeg', '.png', '.webp'}
+        for file in classification.rglob('*') if file.is_file()
+    )
+    print(f'{"OK" if classification_ok else "MISSING"}: V2 processed classification images: {classification}')
+    if not classification_ok:
+        missing.append('classification dataset')
+    detection_ok = detection.is_file()
+    print(f'{"OK" if detection_ok else "MISSING"}: V2 YOLO data.yaml: {detection}')
+    if not detection_ok:
+        missing.append('detection dataset')
     print('INFO: Java worker uses application.yaml and detection.yaml inference settings')
     if missing and args.strict:
         return 1

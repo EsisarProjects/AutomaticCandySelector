@@ -1,7 +1,7 @@
 from src.evaluation.variant_metrics import save_variant_report, variant_names
 
 
-def test_perfect_22_variant_report_is_not_penalized_by_unknown_class(tmp_path):
+def test_perfect_catalog_report_is_not_penalized_by_unknown_class(tmp_path):
     labels=variant_names()
     result=save_variant_report(labels,labels,tmp_path/'perfect',split='test')
     assert result['accuracy']==1.0

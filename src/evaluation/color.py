@@ -31,7 +31,7 @@ def run(split: str):
     variants = catalog()[1]
     bundle = joblib.load(checkpoint)  # Only locally produced trusted files.
     if bundle.get('variants') != variants:
-        raise ValueError('Color checkpoint does not match the 22-variant catalog')
+        raise ValueError('Color checkpoint does not match the current catalog')
     sets = check_splits(path_from_root(load_config('classification')['dataset']['processed']), load_config('classification'))
     dataset = sets[split]
     if not dataset.samples:

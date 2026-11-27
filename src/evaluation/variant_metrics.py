@@ -1,4 +1,4 @@
-"""Common 22-variant reporting, with an explicit 23rd 'unknown' outcome."""
+"""Catalog-driven variant reporting, with a separate unknown/rejection outcome."""
 from __future__ import annotations
 from pathlib import Path
 from src.config import catalog
@@ -22,9 +22,9 @@ def save_variant_report(true_labels, pred_labels, output: Path, *, split: str, f
     y_true = [indices[label] for label in true_labels]
     y_pred = [indices.get(label, unknown) for label in pred_labels]
     metrics = save_report(y_true, y_pred, names, output, split=split, files=files)
-    # 'unknown' is a REJECTION outcome, not a 23rd catalog class.
-    # Include unknown predictions as errors but never average the unknown row into
-    # the macro scores for the 22 actual classes.
+    # 'unknown' is a REJECTION outcome, not a catalog class.
+    # Include unknown predictions as errors but exclude the unknown row
+    # when computing macro scores for the actual catalog variants.
     precision, recall, f1, support = precision_recall_fscore_support(
         y_true, y_pred, labels=list(range(len(names)-1)), zero_division=0)
     metrics['macro_precision'] = float(precision.mean())

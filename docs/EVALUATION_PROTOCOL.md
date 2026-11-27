@@ -7,8 +7,8 @@ This protocol evaluates **three required recognition stages** (detection, type, 
 | ID | Name | Input / reference | Output |
 | --- | --- | --- | --- |
 | E1 | Type recognition | Isolated candy photographs: true type | Accuracy, per-type P/R/F1, 6×6 confusion matrix |
-| E2 | Variant recognition independent of type classifier | Isolated candy photographs: **true type supplied** to variant classifier | Accuracy, per-variant P/R/F1, unknown rate, 22-variant confusion matrix |
-| E3 | Joint type–variant classification | Isolated candy photographs: **predicted** type and then predicted variant | Exact 22-label accuracy, macro-F1, unknown rate, per-class matrix |
+| E2 | Variant recognition independent of type classifier | Isolated candy photographs: **true type supplied** to variant classifier | Accuracy, per-variant P/R/F1, unknown rate, 21-variant confusion matrix |
+| E3 | Joint type–variant classification | Isolated candy photographs: **predicted** type and then predicted variant | Exact 21-label accuracy, macro-F1, unknown rate, per-class matrix |
 | E4 | YOLO detection | Test scene images and one-class `bonbon` bounding boxes | mAP50, mAP50:95, precision, recall |
 | E5 | Full-scene end-to-end recognition | Test scenes + **per-object type, variant, and box** | Box matching, detection precision/recall, exact object recognition precision/recall/F1, exact-scene success |
 | E6 | Final Java application | Independent images and scenarios | Worker/backend artifact integrity and timing + manual UI checklist |
@@ -21,9 +21,9 @@ An **unknown** color is a permissible rejection/abstention for a difficult image
 
 ## Experimental independence
 
-1. `S01` and `S02` are training; `S03` is validation; `S04` is held out for final test.
-2. Distinct physical candies and acquisition conditions should be grouped consistently; near-duplicates must not appear in separate splits.
-3. Any grouped cross-validation uses development sessions only. `S04` stays untouched.
+1. The external `Train_Val` images are split reproducibly into training and validation, while the external `Test` images remain fully held out.
+2. Distinct physical candies and acquisition conditions should remain in the same split; near-duplicates must not cross splits. A random split alone cannot guarantee this.
+3. Grouped cross-validation is not available without group/session metadata. Do not describe the current holdout split as cross-validation.
 4. Hyperparameters, confidence thresholds, IoU rules, and selected checkpoints are fixed **before** test evaluation.
 5. YOLO detector evaluation uses the native one-class labels; full-scene recognition uses additional reference metadata described below.
 
@@ -61,7 +61,7 @@ The code creates evaluation reports under `results/evaluation/`:
 
 - `classification/{val,test}/`: type accuracy, precision/recall/F1, confusion matrix and predictions.
 - `color/{val,test}/`: conditional variant metrics, unknown rate and a breakdown for multivariant types.
-- `joint_classification/{val,test}/`: 6-type and 22-variant performance using predicted types.
+- `joint_classification/{val,test}/`: 6-type and 21-variant performance using predicted types.
 - `detection/{val,test}/`: native YOLO metrics and figures.
 - `end_to_end/{val,test}/`: per-scene matches, exact object/scene metrics and runtime.
 - `application/`: persistent worker/JSON functional checks and wall-clock runtime.

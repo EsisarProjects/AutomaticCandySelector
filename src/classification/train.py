@@ -1,4 +1,4 @@
-"""Train the active ConvNeXt-Tiny only; split by photography session, never image shuffle."""
+"""Train the active ConvNeXt-Tiny using fixed train/val/test assignments."""
 from __future__ import annotations
 import argparse
 import hashlib
@@ -44,19 +44,28 @@ class SessionDataset(Dataset):
 
 def check_splits(processed_dir: Path, settings: dict):
     class_names, variants = catalog()
-    sessions = settings['dataset']['splits']
-    all_sessions = [session for names in sessions.values() for session in names]
-    if set(sessions) != {'train', 'val', 'test'} or len(set(all_sessions)) != len(all_sessions):
-        raise ValueError('train/val/test must exist and must not share a photography session')
+    splits = settings['dataset']['splits']
+    all_folders = [name for names in splits.values() for name in names]
+    if set(splits) != {'train', 'val', 'test'} or len(set(all_folders)) != len(all_folders):
+        raise ValueError('train/val/test must exist and cannot share a split directory')
     datasets = {
-        split: SessionDataset(processed_dir, class_names, variants, sessions[split])
+        split: SessionDataset(processed_dir, class_names, variants, splits[split])
         for split in ('train', 'val', 'test')
     }
     if not datasets['train'].samples or not datasets['val'].samples:
         raise ValueError('Independent train and val images required. Prepare processed V2 images first.')
     if not datasets['test'].samples:
-        print('WARNING: No independent test images available yet; no final evaluation is possible.')
-    # An identical file in two splits indicates leakage. Near-duplicates must be audited manually.
+        raise ValueError('Missing held-out test images; verify the imported test split')
+    # Every catalog variant must be represented in all three subsets.
+    for split, dataset in datasets.items():
+        observed = {(path.parent.parent.parent.name, path.parent.parent.name)
+                    for path, _ in dataset.samples}
+        expected = {(typ, variant) for typ in class_names for variant in variants[typ]}
+        missing = sorted(expected - observed)
+        if missing:
+            preview = ', '.join(f'{typ}/{variant}' for typ, variant in missing[:6])
+            raise ValueError(f'{split} is missing {len(missing)} catalog variants: {preview}')
+    # An identical file in two splits indicates leakage. Near-duplicates still require manual review.
     hashes = {}
     for split, ds in datasets.items():
         for file, _ in ds.samples:
@@ -95,11 +104,11 @@ def main(argv=None):
     processed = path_from_root(settings['dataset']['processed'])
     splits = check_splits(processed, settings)
     for name, dataset in splits.items():
-        print(f'{name}: {len(dataset)} photographs | sessions={settings["dataset"]["splits"][name]}')
+        print(f'{name}: {len(dataset)} photographs | directories={settings["dataset"]["splits"][name]}')
     if args.check_only:
         return
     if (args.evaluate_test or args.test_only) and not len(splits['test']):
-        raise ValueError('Cannot evaluate test: no independent S04 images')
+        raise ValueError('Cannot evaluate test: no held-out test images')
     device_name = training['device']
     if device_name == 'auto':
         device_name = 'cuda' if torch.cuda.is_available() else 'cpu'

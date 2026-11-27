@@ -56,10 +56,10 @@ class ACSPipeline:
         self._validate_color_model()
 
     def _validate_color_model(self):
-        """Reject models incompatible with the complete six-type/22-variant catalog."""
+        """Reject models incompatible with the complete six-type/21-variant catalog."""
         observed = self.color_bundle.get('variants', {})
         if not isinstance(observed, dict) or observed != self.catalog_variants:
-            raise ValueError('Color checkpoint does not cover the complete 22-variant catalog')
+            raise ValueError(f'Color checkpoint does not cover the complete {sum(map(len, self.catalog_variants.values()))}-variant catalog')
         estimators = self.color_bundle.get('models', {})
         required = {typ for typ, variants in self.catalog_variants.items() if len(variants) > 1}
         if not isinstance(estimators, dict) or not required.issubset(estimators):
