@@ -7,9 +7,15 @@ This protocol evaluates **three required recognition stages** (detection, type, 
 | ID | Name | Input / reference | Output |
 | --- | --- | --- | --- |
 | E1 | Type recognition | Isolated candy photographs: true type | Accuracy, per-type P/R/F1, 6×6 confusion matrix |
+<<<<<<< HEAD
 | E2 | Variant recognition independent of type classifier | Isolated candy photographs: **true type supplied** to variant classifier | Accuracy, per-variant P/R/F1, unknown rate, 21-variant confusion matrix |
 | E3 | Joint type–variant classification | Isolated candy photographs: **predicted** type and then predicted variant | Exact 21-label accuracy, macro-F1, unknown rate, per-class matrix |
 | E4 | YOLO detection | Test scene images and one-class `bonbon` bounding boxes | mAP50, mAP50:95, precision, recall |
+=======
+| E2 | Variant recognition independent of type classifier | Isolated candy photographs: **true type supplied** to variant classifier | Accuracy, per-variant P/R/F1, unknown rate, 22-variant confusion matrix |
+| E3 | Joint type–variant classification | Isolated candy photographs: **predicted** type and then predicted variant | Exact 22-label accuracy, macro-F1, unknown rate, per-class matrix |
+| E4 | YOLO detection | Test scene images and one-class `bonbom` bounding boxes | mAP50, mAP50:95, precision, recall |
+>>>>>>> 603da0a (commit new work)
 | E5 | Full-scene end-to-end recognition | Test scenes + **per-object type, variant, and box** | Box matching, detection precision/recall, exact object recognition precision/recall/F1, exact-scene success |
 | E6 | Final Java application | Independent images and scenarios | Worker/backend artifact integrity and timing + manual UI checklist |
 
@@ -29,7 +35,7 @@ An **unknown** color is a permissible rejection/abstention for a difficult image
 
 ## Per-object full-scene ground truth
 
-The YOLO dataset can stay single-class (`bonbon`), but each evaluation candy must also have a true type and variant. Create:
+The YOLO dataset can stay single-class (`bonbom`), but each evaluation candy must also have a true type and variant. Create:
 
 ```text
 datasets/v2/detection/annotations/

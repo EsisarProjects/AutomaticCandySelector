@@ -131,7 +131,7 @@ def run_stages(rgb: np.ndarray, *, detector: Any, classifier: Any,
 
         detections.append({
             "id": rank,
-            "classe_detection": "bonbon",
+            "classe_detection": "bonbom",
             "confiance_detection": float(scores[idx]),
             "bbox_xyxy": bounds,
             "type_predit": str(candy_type),
@@ -160,7 +160,7 @@ def _legend_font(size: int, bold: bool = False) -> ImageFont.ImageFont:
 def draw_detections(rgb: np.ndarray, detections: list[dict[str, Any]]) -> Image.Image:
     """Boîtes numérotées sur la photo ; légende COMPLÈTE dans un panneau externe.
 
-    Les libellés détaillés ne recouvrent jamais les bonbons ni d'autres
+    Les libellés détaillés ne recouvrent jamais les bonboms ni d'autres
     libellés. La photo conserve ses dimensions et coordonnées d'origine ;
     seule la taille de l'image annotée est élargie par le panneau latéral.
     """
@@ -228,7 +228,7 @@ def draw_detections(rgb: np.ndarray, detections: list[dict[str, Any]]) -> Image.
               fill=(216, 222, 231), width=1)
 
     if not detections:
-        draw.text((text_x, 108), "Aucun bonbon détecté", fill=soft, font=font_main)
+        draw.text((text_x, 108), "Aucun bonbom détecté", fill=soft, font=font_main)
         return canvas
 
     for position, item in enumerate(detections):
@@ -301,7 +301,7 @@ def process_file(image_path: Path, *, detector: Any, classifier: Any,
         crop_dir = output / "crops" / stem
         crop_dir.mkdir(parents=True, exist_ok=True)
         for item, crop in zip(detections, crops):
-            crop_path = crop_dir / f"bonbon_{item['id']:03d}.png"
+            crop_path = crop_dir / f"bonbom_{item['id']:03d}.png"
             Image.fromarray(crop).save(crop_path)
             item["image_crop"] = str(crop_path)
     report = {
@@ -318,7 +318,7 @@ def process_file(image_path: Path, *, detector: Any, classifier: Any,
     }
     json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2,
                                     allow_nan=False), encoding="utf-8")
-    print(f"{image_path.name}: {len(detections)} bonbon(s) — {annotated_path.name}")
+    print(f"{image_path.name}: {len(detections)} bonbom(s) — {annotated_path.name}")
     return report
 
 

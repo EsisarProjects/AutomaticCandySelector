@@ -29,7 +29,7 @@ inference:
   max_det: 300
 
 # Independent scene-level evaluation requires per-object TRUE type + variant
-# in addition to the usual one-class bonbon YOLO boxes.
+# in addition to the usual one-class bonbom YOLO boxes.
 evaluation:
   matching_iou: 0.50
   ground_truth:

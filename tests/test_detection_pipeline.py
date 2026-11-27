@@ -95,7 +95,7 @@ def main():
     # La fonction reste correcte en absence de détection.
     assert draw_detections(rgb, []).width > rgb.shape[1]
 
-    # Aucun bonbon : image annotée et fichier JSON toujours générés.
+    # Aucun bonbom : image annotée et fichier JSON toujours générés.
     empty = DetectorDummy([], [])
     no_detections, no_crops = run_stages(rgb, detector=empty, classifier=classifier)
     assert no_detections == [] and no_crops == []

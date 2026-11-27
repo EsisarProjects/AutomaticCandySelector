@@ -31,7 +31,7 @@ def segment_colored_candy(
 ) -> np.ndarray:
     """Masque (0/255) d'un objet *coloré* sur fond blanc/gris.
 
-    Limite connue : un bonbon blanc sur fond blanc n'est généralement pas
+    Limite connue : un bonbom blanc sur fond blanc n'est généralement pas
     détectable par cette méthode. Aucune classe réelle n'est utilisée.
     """
     if rgb.ndim != 3 or rgb.shape[2] != 3 or rgb.dtype != np.uint8:
@@ -63,7 +63,7 @@ def segment_colored_candy(
             continue
         x, y, bw, bh = cv2.boundingRect(contour)
         cx, cy = x + bw / 2, y + bh / 2
-        # Biais faible vers le centre : les bonbons sont placés au centre.
+        # Biais faible vers le centre : les bonboms sont placés au centre.
         distance = math.hypot((cx - w / 2) / (w / 2), (cy - h / 2) / (h / 2))
         score = area / (1.0 + distance)
         if score > best_score:

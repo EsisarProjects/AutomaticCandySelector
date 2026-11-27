@@ -19,7 +19,7 @@ flowchart LR
 
 | Component | Implementation | Purpose |
 | --- | --- | --- |
-| Object detection | Ultralytics YOLO | Locate each candy (`bonbon`) with a bounding box |
+| Object detection | Ultralytics YOLO | Locate each candy (`bonbom`) with a bounding box |
 | Type classification | PyTorch ConvNeXt-Tiny | Recognize one of six candy types |
 | Variant classification | Per-type HSV/KNN classifier | Recognize the appropriate color variant **given the predicted type** |
 | Inference orchestration | Python pipeline | Combine predictions, save annotated images, and produce JSON |
@@ -49,7 +49,7 @@ We organize source photographs by **type, variant**. Original images are retaine
 
 Photographs of the same physical candy or near-identical capture conditions should stay within one split. Grouped cross-validation over development sessions is supported for the ConvNeXt type model and `S04` is not used during that process.
 
-For object detection, we use a single YOLO class: `bonbon`, with image and bounding-box annotation files under `datasets/v2/detection/yolo/`. Full-scene evaluation additionally requires per-object type and variant ground truth, stored separately from the YOLO training labels.
+For object detection, we use a single YOLO class: `bonbom`, with image and bounding-box annotation files under `datasets/v2/detection/yolo/`. Full-scene evaluation additionally requires per-object type and variant ground truth, stored separately from the YOLO training labels.
 
 ## Model configuration and outputs
 
@@ -90,7 +90,7 @@ The difference between evaluations 2 and 3 is essential: in the **independent va
 
 ### Complete-scene ground truth
 
-The detector needs only `bonbon` boxes to train. To evaluate the **complete pipeline**, the scene test set also includes a CSV with one row per candy:
+The detector needs only `bonbom` boxes to train. To evaluate the **complete pipeline**, the scene test set also includes a CSV with one row per candy:
 
 ```csv
 image,x1,y1,x2,y2,type,variant

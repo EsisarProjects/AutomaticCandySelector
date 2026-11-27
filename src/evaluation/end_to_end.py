@@ -3,7 +3,7 @@
 Requires manual per-object ground-truth CSV with columns:
  image,x1,y1,x2,y2,type,variant
 
-The YOLO training labels remain single-class bonbon. This additional table is
+The YOLO training labels remain single-class bonbom. This additional table is
 for evaluation only and MUST NOT be exposed to the inference models.
 
  python -m src.evaluation.end_to_end --split val
