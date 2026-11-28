@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
         titleLabel.setForeground(accentOrange);
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
-        // --- MODE CONTROL PANEL (CLEAN, NO WHITE BUTTON) ---
+        // --- MODE CONTROL PANEL ---
         JPanel modeControlPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         modeControlPanel.setBackground(panelDark);
 
@@ -138,27 +138,14 @@ public class MainFrame extends JFrame {
         centerPanel.setBackground(bgDark);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
 
-        // 1. Image Viewport & Drop Zone
+        // 1. Image Viewport & Pure Drag & Drop Zone
         JPanel imageContainerPanel = new JPanel(new BorderLayout());
         imageContainerPanel.setBackground(panelDark);
         imageContainerPanel.setBorder(new LineBorder(new Color(65, 65, 65), 2, true));
         
-        dropZoneLabel = new JLabel("<html><div style='text-align: center;'><br><br><b>DRAG & DROP IMAGE HERE</b><br><span style='font-size:12px; color:gray;'>or click here to browse file (JPG, PNG, WEBP)</span></div></html>", JLabel.CENTER);
+        dropZoneLabel = new JLabel("<html><div style='text-align: center;'><br><br><b>DRAG & DROP IMAGE HERE</b><br><span style='font-size:12px; color:gray;'>Supports JPG, PNG, WEBP</span></div></html>", JLabel.CENTER);
         dropZoneLabel.setForeground(textLight);
         dropZoneLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        dropZoneLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Allow clicking the drop zone to open file chooser
-        dropZoneLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (!isCameraMode) {
-                    JFileChooser chooser = new JFileChooser();
-                    if (chooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
-                        processSelectedFile(chooser.getSelectedFile());
-                    }
-                }
-            }
-        });
 
         imageContainerPanel.add(dropZoneLabel, BorderLayout.CENTER);
         centerPanel.add(imageContainerPanel, BorderLayout.CENTER);
@@ -177,7 +164,7 @@ public class MainFrame extends JFrame {
         resultInfoArea.setBackground(new Color(24, 24, 24));
         resultInfoArea.setForeground(new Color(240, 240, 240));
         resultInfoArea.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        resultInfoArea.setText("\n  No items processed yet.\n  Please drop an image or click\n  to browse from your device.");
+        resultInfoArea.setText("\n  No items processed yet.\n  Please drag & drop an image here\n  or switch to live camera mode.");
         
         JScrollPane infoScroll = new JScrollPane(resultInfoArea);
         infoScroll.setBorder(BorderFactory.createEmptyBorder());
@@ -242,7 +229,7 @@ public class MainFrame extends JFrame {
         } else {
             isCameraMode = false;
             dropZoneLabel.setIcon(null);
-            dropZoneLabel.setText("<html><div style='text-align: center;'><br><br><b>DRAG & DROP IMAGE HERE</b><br><span style='font-size:12px; color:gray;'>or click here to browse file (JPG, PNG, WEBP)</span></div></html>");
+            dropZoneLabel.setText("<html><div style='text-align: center;'><br><br><b>DRAG & DROP IMAGE HERE</b><br><span style='font-size:12px; color:gray;'>Supports JPG, PNG, WEBP</span></div></html>");
             appendLog(">> Mode switched: [IMAGE DROP MODE].\n");
             sendCommandToPython("MODE:FILE");
         }
