@@ -131,7 +131,7 @@ def run_stages(rgb: np.ndarray, *, detector: Any, classifier: Any,
 
         detections.append({
             "id": rank,
-            "classe_detection": "bonbom",
+            "classe_detection": "bonbon",
             "confiance_detection": float(scores[idx]),
             "bbox_xyxy": bounds,
             "type_predit": str(candy_type),

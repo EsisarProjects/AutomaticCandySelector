@@ -29,7 +29,8 @@ def run(split: str, device: str | None = None) -> dict:
                         imgsz=int(cfg['training']['image_size']),
                         batch=int(cfg['training']['batch_size']),
                         device=device or str(cfg['training']['device']),
-                        workers=int(cfg['training']['workers']),conf=0.767,
+                        workers=int(cfg['training']['workers']),
+                        conf=0.001,  # Courbes PR et mAP : seuil bas standard
                         plots=True, project=str(out), name=split,
                         exist_ok=True, verbose=False)
     box = metrics.box

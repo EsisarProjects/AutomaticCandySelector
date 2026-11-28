@@ -52,9 +52,12 @@ def inspect_dataset(data_file: Path) -> dict[str, Any]:
 
     config = yaml.safe_load(data_file.read_text(encoding="utf-8")) or {}
     names = _class_names(config.get("names"))
-    if names != ["bonbom"] or int(config.get("nc", len(names))) != 1:
+    # Accepter le nom normalisé et l'ancien libellé de l'export Roboflow.
+    # Les deux correspondent à l'unique classe d'indice 0.
+    if names not in (["bonbon"], ["bonbom"]) or int(config.get("nc", len(names))) != 1:
         raise ValueError(
-            f"Une seule classe 'bonbom' est attendue, mais names={config.get('names')!r}, "
+            f"Une seule classe 'bonbon' (ou son ancien alias 'bonbom') est attendue, "
+            f"mais names={config.get('names')!r}, "
             f"nc={config.get('nc', '<absent>')!r}."
         )
 
