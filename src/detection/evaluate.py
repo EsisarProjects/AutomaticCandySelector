@@ -29,7 +29,7 @@ def run(split: str, device: str | None = None) -> dict:
                         imgsz=int(cfg['training']['image_size']),
                         batch=int(cfg['training']['batch_size']),
                         device=device or str(cfg['training']['device']),
-                        workers=int(cfg['training']['workers']),
+                        workers=int(cfg['training']['workers']),conf=0.767,
                         plots=True, project=str(out), name=split,
                         exist_ok=True, verbose=False)
     box = metrics.box
